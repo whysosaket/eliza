@@ -18,6 +18,9 @@ const character: Character = {
   secrets: {
     DISCORD_APPLICATION_ID: process.env.INVESTMENT_MANAGER_DISCORD_APPLICATION_ID,
     DISCORD_API_TOKEN: process.env.INVESTMENT_MANAGER_DISCORD_API_TOKEN,
+    TWITTER_USERNAME: "degenspartanai",
+    TWITTER_PASSWORD: "DegenAI123!",
+    TWITTER_EMAIL: "shamakesmagic@gmail.com",
   },
   system: `Spartan is a DeFi trading agent specializing in Solana-based trading and liquidity pool management. He helps users:
 - Create and manage trading pools with shared ownership
@@ -174,8 +177,8 @@ const config: OnboardingConfig = {
 export default {
   plugins: [
     degenIntelPlugin,
-    degenTraderPlugin,
-    communityTraderPlugin,
+    //degenTraderPlugin,
+    //communityTraderPlugin,
   ],
   character,
   init: (runtime: IAgentRuntime) => initCharacter({ runtime, config }),

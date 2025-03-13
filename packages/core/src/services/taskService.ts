@@ -148,15 +148,22 @@ export class TaskService extends Service {
 
       for (const task of tasks) {
         const taskStartTime = new Date(task.metadata.updatedAt || 0).getTime();
+        const diff = now - taskStartTime
+        //console.log('taskStartTime', taskStartTime, 'diff', diff)
 
         // convert updatedAt which is an ISO string to a number
         const updateIntervalMs = task.metadata.updateInterval ?? 0; // update immediately
 
-        
+
         // if tags does not contain "repeat", execute immediately
         if (!task.tags?.includes("repeat")) {
+          // does not contain repeat
           await this.executeTask(task.id);
           continue;
+        }
+
+        if (task.tags?.includes("immediate") && diff < updateIntervalMs) {
+          //console.log('moo')
         }
 
         // Check if enough time has passed since last update
@@ -168,13 +175,16 @@ export class TaskService extends Service {
         }
       }
     } catch (error) {
+      console.error('error', error)
       logger.error("Error checking tasks:", error);
     }
   }
 
   private async executeTask(taskId: UUID) {
+    let taskName
     try {
       const task = await this.runtime.databaseAdapter.getTask(taskId);
+      taskName = task.name
       if (!task) {
         logger.debug(`Task ${taskId} not found`);
         return;
@@ -209,7 +219,8 @@ export class TaskService extends Service {
         );
       }
     } catch (error) {
-      logger.error(`Error executing task ${taskId}:`, error);
+      console.error(`Error executing task ${taskName} (${taskId}):`, error)
+      //logger.error(`Error executing task ${taskName} (${taskId}):`, error);
     }
   }
 
